@@ -1,15 +1,28 @@
-## laravel-small-api
+<?php
 
-Пример api с jwt авторизацией на основе пакета https://github.com/tymondesigns/jwt-auth
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\DemandController;
+use App\Http\Controllers\Api\ReviewController;
 
-#### Методы без авторизации
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/
 
-    Route::post('registration', [AuthController::class, 'registration']);
-    Route::post('login', [AuthController::class, 'login']);
+Route::post('registration', [AuthController::class, 'registration']);
+Route::post('login', [AuthController::class, 'login']);
 
-#### Методы с авторизацией
-
-Запросы должны содержать заголовок Authorization Bearer {token}
+Route::middleware('auth:api')->group(function () {
 
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::get('logout', [AuthController::class, 'logout']);
@@ -31,3 +44,4 @@
     Route::post('demands/{demand_id}/reviews', [ReviewController::class, 'create']);
     Route::get('reviews/user/{user_id}', [ReviewController::class, 'list']);
 
+});
